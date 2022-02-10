@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: EventBridge 
+
+Resources:
+##########################################################################
+#   EventBridge                                                          #
+##########################################################################
+  CSVProcessingBus:
+    Type: AWS::Events::EventBus
+    Properties:
+      Name: !Ref AWS::StackName
+
+Outputs:
+  CSVProcessingBusName:
+    Description: EventBridge csv bus name
+    Value: !Ref CSVProcessingBus
+    Export:
+      Name: CSVProcessingBusName
+  CSVProcessingBusArn:
+    Description: EventBridge csv bus arn
+    Value: !GetAtt CSVProcessingBus.Arn
+    Export:
+      Name: CSVProcessingBusArn

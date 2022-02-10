@@ -1,0 +1,60 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: S3 Bucket
+
+Resources:
+##########################################################################
+#   S3                                                                  #
+##########################################################################
+  SourceBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      CorsConfiguration:
+        CorsRules:
+        - AllowedHeaders:
+            - "*"
+          AllowedMethods:
+            - GET
+            - PUT
+            - HEAD
+          AllowedOrigins:
+            - "*"
+      NotificationConfiguration:
+        EventBridgeConfiguration:
+          EventBridgeEnabled: True
+      LifecycleConfiguration:
+        Rules:
+          - Id: DeleteLifeCyclePolicy
+            Status: Enabled
+            ExpirationInDays: 1
+##########################################################################
+#   BUCKET POLICY                                                        #
+##########################################################################
+  SourceBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref SourceBucket
+      PolicyDocument:
+        Statement:
+        - Action: s3:*
+          Effect: Deny
+          Principal: "*"
+          Resource:
+          - !Sub "arn:aws:s3:::${SourceBucket}/*"
+          - !Sub "arn:aws:s3:::${SourceBucket}"
+          Condition:
+            Bool:
+              aws:SecureTransport: false
+
+Outputs:
+  SourceBucketName:
+    Value: !Ref SourceBucket
+    Export:
+      Name: SourceBucket
+  SourceBucketArn:
+      Value:
+        Fn::GetAtt:
+          - SourceBucket
+          - Arn
+      Export:
+        Name: SourceBucketArn

@@ -1,0 +1,61 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: S3 to Lambda
+
+# Global values that are applied to all applicable resources in this template
+Globals:
+  Function:
+    MemorySize: 3008
+    Architectures: ["arm64"]
+    Handler: bootstrap
+    Runtime: provided.al2
+    Timeout: 29
+    Environment:
+      Variables:
+        RUST_BACKTRACE: 1
+        RUST_LOG: info
+
+Resources:
+##########################################################################
+#   Lambda Function                                                      #
+##########################################################################
+
+  TitleProcessingFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../build/handler/
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - "s3:GetObject"
+              Resource:
+                - !ImportValue SourceBucketArn
+                - !Sub
+                  - "${SourceBucketArn}/*"
+                  - SourceBucketArn: !ImportValue SourceBucketArn
+      Events:
+        S3EventBridgeRule:
+          Type: EventBridgeRule
+          Properties:
+            InputPath: $.detail
+            Pattern:
+              source:
+                - aws.s3
+              detail:
+                bucket:
+                  name:
+                    - !ImportValue SourceBucket
+                object:
+                  key: 
+                    - prefix: 'title.basics.tsv'
+                reason:
+                  - PutObject
+                  - CompleteMultipartUpload
+
+Outputs:
+  TitleProcessingFunction:
+    Description: "Title csv processing function ARN"
+    Value: !GetAtt TitleProcessingFunction.Arn
