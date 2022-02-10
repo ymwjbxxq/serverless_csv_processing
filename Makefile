@@ -14,9 +14,9 @@ build-%:
 	cp -v ./target/$(ARCH)/release/$* ./build/$*/bootstrap
 
 deploy:
-	sam deploy --guided --no-fail-on-empty-changeset --no-confirm-changeset --profile test --stack-name ${STACK_NAME}-s3 					--template-file ./deployment/s3-template.yml
-	sam deploy --guided --no-fail-on-empty-changeset --no-confirm-changeset --profile test --stack-name ${STACK_NAME}-eventbridge	--template-file ./deployment/eventbridge-template.yml
-	sam deploy --guided --no-fail-on-empty-changeset --no-confirm-changeset --profile test --stack-name ${STACK_NAME}-lambda 			--template-file ./deployment/lambda-template.yml
+	sam deploy --guided --no-fail-on-empty-changeset --no-confirm-changeset --profile test --stack-name ${STACK_NAME}-s3 --template-file ./deployment/s3-template.yml
+	sam deploy --guided --no-fail-on-empty-changeset --no-confirm-changeset --profile test --stack-name ${STACK_NAME}-eventbridge --template-file ./deployment/eventbridge-template.yml
+	sam deploy --guided --no-fail-on-empty-changeset --no-confirm-changeset --profile test --stack-name ${STACK_NAME}-lambda --template-file ./deployment/lambda-template.yml
 
 delete:
 	sam delete --profile test --stack-name ${STACK_NAME}-eventbridge
