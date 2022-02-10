@@ -4,6 +4,8 @@ Recently, I wrote how to parse a big CSV file in Rust [here](https://dfrasca.has
 
 This project is concentrated on the backend side of the application.
 
+The full article is [here](https://dfrasca.hashnode.dev/rust-building-an-async-csv-parser)
+
 ## How it works ##
 
 ![picture](https://github.com/ymwjbxxq/serverless_csv_processing/blob/main/readme/csv.png)
