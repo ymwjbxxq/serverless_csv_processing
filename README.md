@@ -6,7 +6,7 @@ This project is concentrated on the backend side of the application.
 
 ## How it works ##
 
-![picture](https://github.com/ymwjbxxq/serverless_csv_processing/blob/main/readme/csv.jpeg)
+![picture](https://github.com/ymwjbxxq/serverless_csv_processing/blob/main/readme/csv.png)
 
 - The [IMDb Datasets](https://www.imdb.com/interfaces/) file title.basics.tsv.gz is uploaded
 - Amazon S3 emit the event to Amazon EventBridge
